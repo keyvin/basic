@@ -40,6 +40,7 @@ int main(int argv, char ** argc){
     root = genNewNode(); 
     setvar=0;
     fgets(buffer, 100, stdin);
+    buffer[strlen(buffer)-1]= '\0';
     tmp = newLine(buffer);
     list = insertLine(list, tmp);
     printList(list);

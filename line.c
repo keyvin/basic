@@ -36,14 +36,13 @@ line * insertLine(line *list, line *toinsert){
   }
 
   while (position->next){
-    position = position->next;
      if (position->lineno == toinsert->lineno){
       position->prev->next = toinsert;
       toinsert->next = position->next;
       free(position);
       return list;
      }
-     if (position->lineno > list->lineno){
+     if (position->lineno > toinsert->lineno){
        toinsert->prev = position->prev;
        toinsert->next = position;
        position->prev->next = toinsert;
@@ -51,6 +50,13 @@ line * insertLine(line *list, line *toinsert){
        return list;
      }
      position = position->next;
+  }
+  if (position->lineno > toinsert->lineno){
+    toinsert->prev = position->prev;
+    toinsert->next = position;
+    position->prev->next = toinsert;
+    position->prev = toinsert;
+    return list;
   }
   position->next = toinsert;
   toinsert->prev = position;
