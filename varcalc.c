@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "varlist.h"
-
+#include "line.h"
 /*tree structure.*/
 typedef struct EVALTREE {
   int val;
@@ -27,20 +27,25 @@ void freeTree(evaltree *);
 char * readVarName(char *, char *);
 
 int main(int argv, char ** argc){
-  char buffer[101];
+  char buffer[201];
   char tmpvarname[20];
   var *varlist = createVar();
   char *startpos = buffer;
   evaltree *root = NULL;
+  line *list = NULL;
+  line *tmp = NULL;
   int setvar=0;
   while (1){
     startpos = buffer;
     root = genNewNode(); 
     setvar=0;
     fgets(buffer, 100, stdin);
-    if (strncmp(buffer, "SET", 3)==0){
+    tmp = newLine(buffer);
+    list = insertLine(list, tmp);
+    printList(list);
+    /*if (strncmp(buffer, "SET", 3)==0){
       startpos = readVarName(buffer+4, tmpvarname);
-      /*skip equals when parsing*/
+      //skip equals when parsing
       startpos++;
       setvar=1;
     }
@@ -53,8 +58,9 @@ int main(int argv, char ** argc){
     else{
       setVar(varlist, tmpvarname, root->result);
     }
-    freeTree(root);
+    freeTree(root);*/
   }
+  
   freeVarList(varlist);
   return 0;
 }
