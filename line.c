@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "parse.h"
+#include "parsetree.h"
+#include "varlist.h"
+
+
 line * newLine(char *addline){
   char buffer[200];
   char *pos= addline;
@@ -73,3 +78,24 @@ void printList(line *head)
   return;
 }
 
+line *executeLine(line *toexec, var *varlist){
+  char tmpbuffer[100];
+  evaltree *root = NULL;
+  char * startpos = NULL;
+  root = genNewNode();
+  if (!toexec){
+    return NULL;
+  }
+  startpos = toexec->instruction;
+  if (strncmp(toexec->instruction, "SET", 3)==0){
+      startpos = readVarName(toexec->instruction+4, tmpbuffer);
+      //skip equals when parsing
+      startpos++;
+      //tmpbuffer[strlen(tmpbuffer)-1]= '\0';
+      buildTree(startpos, root, 0);
+      calcTree(root, varlist);
+      setVar(varlist, tmpbuffer, root->result);    
+  }
+  freeTree(root);
+  return toexec->next;
+}

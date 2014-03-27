@@ -1,3 +1,5 @@
+#ifndef VARLIST
+#define VARLIST 1
 #define MAX_VAR_LENGTH 20
 
 typedef struct VAR{
@@ -11,4 +13,4 @@ var * createVar();
 var * getVar(var *, char *);
 void setVar(var *, char*, int);
 void freeVarlist(var *);
-
+#endif
