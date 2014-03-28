@@ -15,13 +15,33 @@ char * readVarName(char *input, char *output){
   return input;
 }
 
+int isoperator(char a){
+  if (a=='*' || a=='/' || a=='-' || a=='+' || a=='&' || a=='|'||a=='^'||a=='>'||a=='<'||a=='='){
+    return 1;
+  }
+  return 0;
+}
+
+
+int noOperator(char *pos){
+  char *currchar=pos;
+  /*only check to first ) because that is the end to the recursion*/
+  for (currchar; *currchar!='\0'&&*currchar!=')'; currchar++){
+    if (isoperator(*currchar))
+      return 0;
+  }
+  return 1;
+}
+	
+
 char * buildTree(char *string, evaltree *currnode, int isleftset){
   char buffer[21];
   char *buffpos = buffer;
   char *pos = NULL;
   evaltree *tmptree;
   int leftset = isleftset;
-  int val;
+  int val=0;
+  int noop=0;
   //clear buffer
   memset(buffer, sizeof(char), '\0');
   //test for valid input
@@ -30,6 +50,7 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
   for (pos = string; *pos!='\0'; pos++){
     //if we are entering a parenthisis
     if (!leftset){
+     
       if (*pos == '('){
 	printf("encountered ( on left pair, recursing\n");
 	//add new node to left side, set it as current node, and recurse
@@ -39,6 +60,8 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
       }
       else {
 	//not a parenthisis. Read integer into buffer and sscanf it.
+	noop = noOperator(pos);
+	printf("Value of noop is %d\n", noop);
 	if (isdigit(*pos)){
 	  while (isdigit(*pos)){
 	    *buffpos++ = *pos++;
@@ -47,6 +70,10 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
 	  sscanf(buffer, "%i", &val);
 	  printf("read left val %d\n", val);
 	  //create a new leaf on left side to store read value
+	  if (noop){
+	    currnode->val = val;
+	    return pos;
+	  }
 	  currnode->left = genNewNode();
 	  currnode->left->val = val;
 	  buffpos=buffer;
@@ -54,7 +81,11 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
 	else if (isalpha(*pos)){
 	  pos = readVarName(pos, buffer);
 	  printf ("read varname %s on left side\n", buffer);
-	    currnode->left = genNewNode();
+	  if (noop){
+	    strcpy(currnode->varname, buffer);
+	    return pos;
+	  }
+	  currnode->left = genNewNode();
 	  strcpy(currnode->left->varname, buffer);
 	}
       }
