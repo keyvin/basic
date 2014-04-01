@@ -100,6 +100,7 @@ line *executeLine(line *toexec, var *varlist){
   char tmpbuffer[100];
   evaltree *root = NULL;
   char * startpos = NULL;
+  int counter = 0;
   root = genNewNode();
   if (!toexec){
     return NULL;
@@ -155,17 +156,25 @@ line *executeLine(line *toexec, var *varlist){
     }
     while(toexec->next){
       toexec=toexec->next;
-      if (strncmp(toexec->instruction, "ELSE", 4)==0)
+      //keep track of nested if then else
+      if (strncmp(toexec->instruction, "IF",2)==0)
+	counter++;
+      if ((strncmp(toexec->instruction, "ELSE", 4)==0)&&counter==0)
 	return toexec->next;
+      if (strncmp(toexec->instruction, "END IF", 6)==0)
+	counter--;
     }
     return NULL;
   }
   if (strncmp(toexec->instruction, "ELSE", 4)==0){
     while (toexec->next){
       toexec=toexec->next;
-      if (strncmp(toexec->instruction,"END IF", 6)==0){
+      if (strncmp(toexec->instruction, "IF",2)==0)
+	counter++;
+      if ((strncmp(toexec->instruction,"END IF", 6)==0)&&counter==0)
 	return toexec->next;
-      }  
+      if (strncmp(toexec->instruction, "END IF", 6)==0)
+	counter--;
     }
     return NULL;
   }

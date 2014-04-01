@@ -33,7 +33,7 @@ int main(int argv, char ** argc){
     fgets(buffer, 100, stdin);
     buffer[strlen(buffer)-1]= '\0';
     if (!strncmp("EXEC", buffer, 4)){
-      printf("exec encountered\n");
+      //printf("exec encountered\n");
       currinstruction = executeLine(list, varlist);
       while (currinstruction){
 	printf("in instruction %d \n", currinstruction->lineno);
@@ -43,7 +43,7 @@ int main(int argv, char ** argc){
     else{
       tmp = newLine(buffer);
       list = insertLine(list, tmp);
-      printList(list);
+      //printList(list);
     }
   }    
   freeVarList(varlist);
