@@ -36,7 +36,7 @@ int main(int argv, char ** argc){
       printf("exec encountered\n");
       currinstruction = executeLine(list, varlist);
       while (currinstruction){
-	printf("in instruction \n");
+	printf("in instruction %d \n", currinstruction->lineno);
 	currinstruction = executeLine(currinstruction, varlist);
       }
     }

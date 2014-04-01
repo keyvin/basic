@@ -62,7 +62,7 @@ int calcTree(evaltree *currnode, var *varlist){
       break;
   }
  
-  printf ("result so far: %d\n", currnode->result);
+ // printf ("result so far: %d\n", currnode->result);
   return 0;
 }
 
