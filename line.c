@@ -178,8 +178,37 @@ line *executeLine(line *toexec, var *varlist){
     }
     return NULL;
   }
-    
+  if (strncmp(toexec->instruction, "WHILE", 5)==0){
+    //    printf("In While at line %d", toexec->lineno);
+    startpos+=6;
+    buildTree(startpos, root,0);
+    calcTree(root,varlist);
+    if (root->result !=0)
+      return toexec->next;
+    while(toexec->next){
+      toexec = toexec->next;
+      if (strncmp(toexec->instruction, "WHILE", 5)==0)
+	counter++;
+      if (strncmp(toexec->instruction, "WEND", 4)==0&&counter==0)
+	return toexec->next;
+      if (strncmp(toexec->instruction, "WEND", 4)==0)
+	counter--;
+    }
+    return NULL;
+  }
 
+  if (strncmp(toexec->instruction, "WEND", 4)==0){
+    while (toexec->prev){
+      toexec=toexec->prev;
+      if (strncmp(toexec->instruction, "WEND", 4)==0)
+	counter++;
+      if (strncmp(toexec->instruction, "WHILE", 5)==0&&counter==0)
+	return toexec;
+      if (strncmp(toexec->instruction, "WHILE", 5)==0)
+	counter--;
+    }
+    return NULL;
+  }
 
   freeTree(root);
   return toexec->next;
