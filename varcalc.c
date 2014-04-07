@@ -7,6 +7,7 @@
 #include "line.h"
 #include "parse.h"
 #include "parsetree.h"
+#include "executor.h"
 /*tree structure.*/
 
 
@@ -21,7 +22,7 @@
 int main(int argv, char ** argc){
   char buffer[201];
   char tmpvarname[20];
-  var *varlist = createVar();
+ 
   char *startpos = buffer;
   line *currinstruction = NULL;
   line *list = NULL;
@@ -41,11 +42,7 @@ int main(int argv, char ** argc){
     buffer[strlen(buffer)-1]= '\0';
     if (!strncmp("EXEC", buffer, 4)){
       //printf("exec encountered\n");
-      currinstruction = executeLine(list, varlist);
-      while (currinstruction){
-	printf("in instruction %d \n", currinstruction->lineno);
-	currinstruction = executeLine(currinstruction, varlist);
-      }
+      executor(list, NULL);
     }
     else{
       tmp = newLine(buffer);
@@ -53,7 +50,6 @@ int main(int argv, char ** argc){
       //printList(list);
     }
   }    
-  freeVarList(varlist);
   return 0;
 }
 

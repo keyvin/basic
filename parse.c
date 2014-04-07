@@ -95,7 +95,7 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
       pos++;
     }
     //check for operator
-    if (*pos=='*' || *pos=='/' || *pos=='-' || *pos=='+' || *pos=='&' || *pos=='|'||*pos=='^'||*pos=='>'||*pos=='<'||*pos=='='){
+    if (isoperator(*pos){
       //printf("operator %c read\n", *pos);
       //set the current node operator to the read operator
       currnode->operator = *pos;
@@ -139,7 +139,7 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
       pos++;
       return pos;
     }
-    if (*pos=='+'||*pos=='-'||*pos=='/'||*pos=='*'||*pos=='&'||*pos=='|'||*pos=='^'||*pos=='>'||*pos=='<'||*pos=='='){
+      if (isoperator(*pos)){
       //push left
       //printf("additional operator. pushing tree left and reparsing");
       tmptree = genNewNode();
