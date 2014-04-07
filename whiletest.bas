@@ -18,6 +18,3 @@
 50 WEND
 60 PRINT 0
 EXEC
-
-
-

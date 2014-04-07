@@ -27,10 +27,17 @@ int main(int argv, char ** argc){
   line *list = NULL;
   line *tmp = NULL;
   int setvar=0;
+  char *eof = NULL;
   while (1){
     startpos = buffer;
     setvar=0;
-    fgets(buffer, 100, stdin);
+    eof = fgets(buffer, 100, stdin);
+    if (!eof){
+      printf("EOF Encountered. Exiting\n");
+      return 0;
+    }
+    if (strlen(buffer)==1)
+      continue;
     buffer[strlen(buffer)-1]= '\0';
     if (!strncmp("EXEC", buffer, 4)){
       //printf("exec encountered\n");
