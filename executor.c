@@ -17,5 +17,5 @@ int executor(line *list, var *varlist){
   freeVarList(varlist);
   if (!lookup)
     return 0;
-  return lookup->value;
+  return lookup->val.value.i;
 }

@@ -119,28 +119,28 @@ line *executeLine(line *toexec, var *varlist){
     startpos+=6;
     buildTree(startpos, root, 0);
     calcTree(root, varlist);
-    printf("%d\n", root->result);
+    printf("%d\n", root->result.value.i);
   }
   if (strncmp(toexec->instruction, "GOTO", 4)==0){
     startpos+=5;
     buildTree(startpos, root, 0);
     calcTree(root, varlist);
-    if (root->result ==  toexec->lineno){
+    if (root->result.value.i ==  toexec->lineno){
       printf ("Pointless infinite loop at line %d\n", toexec->lineno);
       return NULL;
     }
-    if (root->result < toexec->lineno){
+    if (root->result.value.i < toexec->lineno){
       while (toexec->prev){
 	toexec = toexec->prev;
-	if (toexec->lineno == root->result)
+	if (toexec->lineno == root->result.value.i)
 	  return toexec;
       }
       return NULL;
     }
-    if (root->result > toexec->lineno){
+    if (root->result.value.i > toexec->lineno){
       while (toexec->next){
 	toexec = toexec->next;
-	if (toexec->lineno == root->result)
+	if (toexec->lineno == root->result.value.i)
 	  return toexec;
       }
       return NULL;
@@ -151,7 +151,7 @@ line *executeLine(line *toexec, var *varlist){
     startpos+=3;
     buildTree(startpos, root, 0);
     calcTree(root, varlist);
-    if (root->result != 0){
+    if (root->result.value.i != 0){
       return toexec->next;
     }
     while(toexec->next){
@@ -183,7 +183,7 @@ line *executeLine(line *toexec, var *varlist){
     startpos+=6;
     buildTree(startpos, root,0);
     calcTree(root,varlist);
-    if (root->result !=0)
+    if (root->result.value.i !=0)
       return toexec->next;
     while(toexec->next){
       toexec = toexec->next;
