@@ -1,0 +1,7 @@
+I need to define the variable type enum.
+
+Where should the string data type be allocated. I think I will use the function.
+
+I need to implement an undefined behavior that throws an error.
+
+refactor varlist typedefed to var into varlist type....

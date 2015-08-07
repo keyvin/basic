@@ -5,7 +5,8 @@
 var * createVar(){
   var *newvar = (var *) malloc(sizeof(var));
   memset(newvar->varname, '\0', MAX_VAR_LENGTH);
-  newvar->value = 0;
+  newvar->val.value.i = 0;
+  newvar->val.type = integer;
   newvar->next = NULL;
 }
 
@@ -21,24 +22,44 @@ var * getVar(var *head, char *varname){
 }
 
 //if first element of list is empty, assign a value to first element
-void setVar(var *head, char *varname, int value){
+void setVar(var *head, char *varname, value val){
   var * existing = NULL;
   
   if (head->varname[0]=='\0'){
     strcpy( head->varname, varname );
-    head->value = value;
+
+    if (val.type == string){
+      head->val.value.s = (char *) malloc(strlen(val.value.s) + 1);
+      head->val.type = string;
+    }
+    else
+      head->val = val;
+      
+  
     head->next = NULL;
     return;
   }
 
   if (existing = getVar(head, varname)){
-    existing->value = value;
+    if (existing->val.type == string){
+      if (existing->val.value.s){
+	free(existing->val.value.s);
+      }
+    }
+    existing->val = val;
     return;
   }
   
   existing = createVar();
   strcpy( existing->varname, varname );
-  existing->value = value;
+
+  if (val.type == string){
+    existing->val.value.s = (char *) malloc(strlen(val.value.s)+1);
+    strcpy(existing->val.value.s, val.value.s);
+    val.type = string;
+  }
+  else
+    existing->val = val;
   existing->next = NULL;
   while (head->next != NULL){
     head = head->next;
@@ -52,6 +73,8 @@ void freeVarList(var *head){
   while (head!=NULL)
   {
     tmp = head->next;
+    if (head->val.type == string && head->val.value.s)
+      free(head->val.value.s);
     free(head);
     head = tmp;
   }

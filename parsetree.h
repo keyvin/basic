@@ -3,10 +3,11 @@
 #include "varlist.h"
 
 typedef struct EVALTREE {
-  int val;
-  int result;
+  value val;
+  value result;
+
   char operator;
-  char varname[20];
+  char varname[MAX_VAR_LENGTH];
   struct EVALTREE *left;
   struct EVALTREE *right;
 } evaltree;
