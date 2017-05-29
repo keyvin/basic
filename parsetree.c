@@ -29,10 +29,18 @@ int calcTree(evaltree *currnode, var *varlist){
     }
     return 0;
   }
-  vartype ltype = currnode->left->result.type;
-  vartype rtype = currnode->right->result.type;
-  varval *lval = &(currnode->left->result.value);
-  varval *rval = &(currnode->right->result.value);
+  vartype ltype, rtype;
+  varval *lval;
+  varval *rval;
+    
+  if (currnode->left){
+    vartype ltype = currnode->left->result.type; 
+    varval *lval = &(currnode->left->result.value);
+  }
+  if (currnode->right){
+    vartype rtype = currnode->right->result.type;
+    varval *rval = &(currnode->right->result.value);
+  }
   
   switch (currnode->operator){
     /*leaf node, set result as value*/
