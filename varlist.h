@@ -2,7 +2,7 @@
 #define VARLIST 1
 #define MAX_VAR_LENGTH 20
 
-typedef enum {string, integer, floating, undefined} vartype;
+typedef enum {str, integer, floating, undefined} vartype;
 
 typedef union VAR_VAL {
   int i;

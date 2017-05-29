@@ -6,6 +6,7 @@
 #include "varlist.h"
 #include "parsetree.h"
 
+//returns new position in the parser.
 char * readVarName(char *input, char *output){
   memset(output, '\0', 0);
   while (isalpha(*input) ){
@@ -33,6 +34,16 @@ int noOperator(char *pos){
   return 1;
 }
 	
+char * readString(char *start, char *ret_val, int size){
+  int copied = 0;
+  for (start; *start != '\0' && *start !='\"' && copied < size; start++){
+    *(ret_val++) = *start;
+    copied++;
+  }
+  *ret_val = '\0';
+  start++;
+  return start;
+}
 
 char * buildTree(char *string, evaltree *currnode, int isleftset){
   char buffer[21];
@@ -90,6 +101,14 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
 	  currnode->left = genNewNode();
 	  strcpy(currnode->left->varname, buffer);
 	}
+	//TODO arbitrary magic number string size
+	else if (*pos == '\"'){
+	  pos++;
+	  currnode->left = genNewNode();
+	  currnode->left->val.type = str;
+	  currnode->left->val.value.s = (char *) malloc(sizeof(char)*30);
+	  pos = readString(pos, currnode->left->val.value.s, 30); 
+	}
       }
     }
     //advance whitespace. Not needed here
@@ -134,6 +153,12 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
 	  //printf ("read varname %s on right side\n", buffer);
 	  currnode->right = genNewNode();
 	  strcpy(currnode->right->varname, buffer);
+      }
+      else if (*pos == '\"'){
+	  currnode->left = genNewNode();
+	  currnode->left->val.type = str;
+	  currnode->left->val.value.s = (char *) malloc(sizeof(char)*30);
+	  pos = readString(pos, currnode->left->val.value.s, 30); 
       }
     }
     //ending a level of recursion on the right side. Return

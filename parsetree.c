@@ -18,34 +18,56 @@ int calcTree(evaltree *currnode, var *varlist){
     calcTree(currnode->right, varlist);
   }
   /*A variable containing element of the tree will always be a leaf*/
+  //or a string...
   /*look up value and set it. */
   if (currnode->varname[0]!='\0'){
     getvar= getVar(varlist, currnode->varname);
-    if (getvar)
-      currnode->result = getvar->val;
+    if (getvar){
+      if (getvar->val.type == str){
+	currnode->result.value.s = (char *) malloc(sizeof(char)*strlen(getvar->val.value.s));
+	strcpy(currnode->result.value.s, getvar->val.value.s);
+      }
+      else
+	currnode->result = getvar->val;
+      
+    }
     else {
 	currnode->result.value.i = 0;
 	currnode->result.type = undefined;
     }
     return 0;
   }
+  //A string
+  // if (currnode->val.type == str){
+  //  currnode->result.type = str;
+  //  currnode->result.value.s = currnode->val.value.s;
+  //  return 0;
+  //}
   vartype ltype, rtype;
   varval *lval;
   varval *rval;
     
   if (currnode->left){
-    vartype ltype = currnode->left->result.type; 
-    varval *lval = &(currnode->left->result.value);
+    ltype = currnode->left->result.type; 
+    lval = &(currnode->left->result.value);
   }
   if (currnode->right){
-    vartype rtype = currnode->right->result.type;
-    varval *rval = &(currnode->right->result.value);
+    rtype = currnode->right->result.type;
+    rval = &(currnode->right->result.value);
   }
   
   switch (currnode->operator){
     /*leaf node, set result as value*/
+    //TODO - This is a hack, needs to be properly fixed in parser
     case'\0':
-      currnode->result = currnode->val;
+      if (currnode->left){
+	currnode->result = currnode->left->val;
+	currnode->left->val.value.s = NULL;
+      }
+      else {
+	currnode->result = currnode->val;
+      }
+	
       break;
    /*non leafs. Perform appropriate calculation of children based on type*/
     case '+':
@@ -65,7 +87,7 @@ int calcTree(evaltree *currnode, var *varlist){
 	currnode->result.type = floating;
 	currnode->result.value.f = lval->f + rval->f;
       }
-      else if (ltype == string && rtype == string){
+      else if (ltype == str && rtype == str){
 	currnode->result.value.s = malloc(strlen(lval->s)+strlen(rval->s)+1);
 	strcpy(currnode->result.value.s, lval->s);
 	strcat(currnode->result.value.s, rval->s);
@@ -193,10 +215,13 @@ void freeTree(evaltree *currnode){
   if (currnode->right)
     freeTree(currnode->right);
   if (currnode) {
-    if (currnode->val.type == string && currnode->val.value.s)
+    if (currnode->val.type == str && currnode->val.value.s){
       free (currnode->val.value.s);
-    if (currnode->result.type == string && currnode->result.value.s)
-      free(currnode->result.value.s);
+      
+    }
+    if (currnode->result.type == str && currnode->result.value.s)
+      if (currnode->val.value.s != currnode->result.value.s)
+	free(currnode->result.value.s);
     free(currnode);
   }
   return;

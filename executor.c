@@ -13,6 +13,7 @@ int executor(line *list, var *varlist){
     printf("in instruction %d \n", currinstruction->lineno);
     currinstruction = executeLine(currinstruction, varlist);
   }
+  //TODO This only works for integers
   lookup = getVar(varlist, "__RETURN");
   freeVarList(varlist);
   if (!lookup)

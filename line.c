@@ -119,7 +119,10 @@ line *executeLine(line *toexec, var *varlist){
     startpos+=6;
     buildTree(startpos, root, 0);
     calcTree(root, varlist);
-    printf("%d\n", root->result.value.i);
+    if (root->result.type == integer)
+	printf("%d\n", root->result.value.i);
+    if (root->result.type == str)
+      printf("%s\n", root->result.value.s);
   }
   if (strncmp(toexec->instruction, "GOTO", 4)==0){
     startpos+=5;

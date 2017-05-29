@@ -28,9 +28,9 @@ void setVar(var *head, char *varname, value val){
   if (head->varname[0]=='\0'){
     strcpy( head->varname, varname );
 
-    if (val.type == string){
+    if (val.type == str){
       head->val.value.s = (char *) malloc(strlen(val.value.s) + 1);
-      head->val.type = string;
+      head->val.type = str;
     }
     else
       head->val = val;
@@ -41,7 +41,7 @@ void setVar(var *head, char *varname, value val){
   }
 
   if (existing = getVar(head, varname)){
-    if (existing->val.type == string){
+    if (existing->val.type == str){
       if (existing->val.value.s){
 	free(existing->val.value.s);
       }
@@ -53,10 +53,10 @@ void setVar(var *head, char *varname, value val){
   existing = createVar();
   strcpy( existing->varname, varname );
 
-  if (val.type == string){
+  if (val.type == str){
     existing->val.value.s = (char *) malloc(strlen(val.value.s)+1);
     strcpy(existing->val.value.s, val.value.s);
-    val.type = string;
+    existing->val.type = str;
   }
   else
     existing->val = val;
@@ -73,7 +73,7 @@ void freeVarList(var *head){
   while (head!=NULL)
   {
     tmp = head->next;
-    if (head->val.type == string && head->val.value.s)
+    if (head->val.type == str && head->val.value.s)
       free(head->val.value.s);
     free(head);
     head = tmp;
