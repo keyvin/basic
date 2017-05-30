@@ -61,11 +61,13 @@ int calcTree(evaltree *currnode, var *varlist){
     //TODO - This is a hack, needs to be properly fixed in parser
     case'\0':
       if (currnode->left){
-	currnode->result = currnode->left->val;
+	currnode->result = currnode->left->result;
 	currnode->left->val.value.s = NULL;
+	currnode->left->result.value.s = NULL;
       }
       else {
 	currnode->result = currnode->val;
+	currnode->val.value.s = NULL;
       }
 	
       break;
@@ -87,6 +89,7 @@ int calcTree(evaltree *currnode, var *varlist){
 	currnode->result.type = floating;
 	currnode->result.value.f = lval->f + rval->f;
       }
+      //todo - wrong.
       else if (ltype == str && rtype == str){
 	currnode->result.value.s = malloc(strlen(lval->s)+strlen(rval->s)+1);
 	strcpy(currnode->result.value.s, lval->s);

@@ -30,6 +30,7 @@ void setVar(var *head, char *varname, value val){
 
     if (val.type == str){
       head->val.value.s = (char *) malloc(strlen(val.value.s) + 1);
+      strcpy(head->val.value.s, val.value.s); 
       head->val.type = str;
     }
     else
