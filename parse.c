@@ -10,7 +10,9 @@
 char * readVarName(char *input, char *output){
   memset(output, '\0', 0);
   while (isalpha(*input) ){
-    *(output++)=*(input++);
+    *output = *input;
+    input++;
+    output++;
   }
   *output = '\0';
   return input;
@@ -26,7 +28,7 @@ int isoperator(char a){
 
 int noOperator(char *pos){
   char *currchar=pos;
-  /*only check to first ) because that is the end to the recursion*/
+  /*only check to matching ) because that is the end to the recursion*/
   for (currchar; *currchar!='\0'&&*currchar!=')'; currchar++){
     if (isoperator(*currchar))
       return 0;
@@ -43,6 +45,26 @@ char * readString(char *start, char *ret_val, int size){
   *ret_val = '\0';
   start++;
   return start;
+}
+
+var * read_var(char *string){
+  var *a = createVar();
+  
+  return a;
+}
+
+//creates copy of string while removing all spaces
+char * deSpace(char *string){
+  char *buffer, *position;
+  buffer = (char *) malloc(strlen(string));
+  position = buffer;
+  for (string; *string !='\0'; string++){
+    if (*string != ' '){
+      *(position++) = *string;
+    }
+  }
+  *position = '\0';
+  return buffer;
 }
 
 char * buildTree(char *string, evaltree *currnode, int isleftset){
@@ -70,7 +92,7 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
 	pos = buildTree(pos+1, currnode->left, 0);
       }
       else {
-	//not a parenthisis. Read integer into buffer and sscanf it.
+	//not a parenthisis. Read value into buffer and sscanf it.
 	noop = noOperator(pos);
 	//printf("Value of noop is %d\n", noop);
 	if (isdigit(*pos)){

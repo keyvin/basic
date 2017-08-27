@@ -9,6 +9,9 @@
 int calcTree(evaltree *currnode, var *varlist){
   var *getvar;
   /*descend left branch*/
+  /*this is a hack to fix something happening in the parser*/
+  
+
   if (currnode->left){
     calcTree(currnode->left, varlist);
   }
@@ -32,8 +35,8 @@ int calcTree(evaltree *currnode, var *varlist){
       
     }
     else {
-	currnode->result.value.i = 0;
-	currnode->result.type = undefined;
+	currnode->result.value.i = currnode->val.value.i;
+	currnode->result.type = integer;
     }
     return 0;
   }
@@ -64,6 +67,11 @@ int calcTree(evaltree *currnode, var *varlist){
 	currnode->result = currnode->left->result;
 	currnode->left->val.value.s = NULL;
 	currnode->left->result.value.s = NULL;
+      }
+      else if (currnode->right){
+	currnode->result = currnode->right->result;
+	currnode->right->val.value.s = NULL;
+	currnode->right->result.value.s = NULL;
       }
       else {
 	currnode->result = currnode->val;

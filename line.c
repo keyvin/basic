@@ -98,6 +98,7 @@ void printList(line *head)
 
 line *executeLine(line *toexec, var *varlist){
   char tmpbuffer[100];
+  char *despaced = NULL;
   evaltree *root = NULL;
   char * startpos = NULL;
   int counter = 0;
@@ -105,9 +106,11 @@ line *executeLine(line *toexec, var *varlist){
   if (!toexec){
     return NULL;
   }
+  despaced = deSpace(toexec->instruction);
   startpos = toexec->instruction;
+  
   if (strncmp(toexec->instruction, "SET", 3)==0){
-      startpos = readVarName(toexec->instruction+4, tmpbuffer);
+      startpos = readVarName(startpos+4, tmpbuffer);
       //skip equals when parsing
       startpos++;
       //tmpbuffer[strlen(tmpbuffer)-1]= '\0';
@@ -116,7 +119,7 @@ line *executeLine(line *toexec, var *varlist){
       setVar(varlist, tmpbuffer, root->result);    
   }
   if (strncmp(toexec->instruction, "PRINT", 5)==0){
-    startpos+=6;
+    startpos+=5;
     buildTree(startpos, root, 0);
     calcTree(root, varlist);
     if (root->result.type == integer)
@@ -212,7 +215,7 @@ line *executeLine(line *toexec, var *varlist){
     }
     return NULL;
   }
-
+  free(despaced);
   freeTree(root);
   return toexec->next;
 }

@@ -1,3 +1,9 @@
+After stripping all spaces, parsing is not beginning at proper point...
+
+I also just realized I would be removing all spaces within a string.
+
+
+
 I need to define the variable type enum.
 
 Where should the string data type be allocated. I think I will use the function.
