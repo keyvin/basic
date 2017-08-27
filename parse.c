@@ -9,6 +9,8 @@
 //returns new position in the parser.
 char * readVarName(char *input, char *output){
   memset(output, '\0', 0);
+  while (*input ==' ')
+    input++;
   while (isalpha(*input) ){
     *output = *input;
     input++;
