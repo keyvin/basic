@@ -12,7 +12,7 @@ line * newLine(char *addline){
   char buffer[200];
   char *pos= addline;
   char *target = buffer;
-  line * newline = (line *) malloc(sizeof(line));
+  line *newline = (line *) my_malloc(sizeof(line));
   
   if (!isdigit(*pos)){
     printf("Invalid line - must start with line number: %s", addline);
@@ -37,7 +37,7 @@ line * insertLine(line *list, line *toinsert){
   /*equal to head of list*/
   if (toinsert->lineno == list->lineno){
     toinsert->next = list->next;
-    free(list);
+    my_free(list);
     return toinsert;
   }
   /*less than head of list, make new head*/
@@ -53,7 +53,7 @@ line * insertLine(line *list, line *toinsert){
      if (position->lineno == toinsert->lineno){
       position->prev->next = toinsert;
       toinsert->next = position->next;
-      free(position);
+      my_free(position);
       return list;
      }
      /*insert sorted*/
@@ -70,7 +70,7 @@ line * insertLine(line *list, line *toinsert){
   if (position->lineno == toinsert->lineno){
       position->prev->next = toinsert;
       toinsert->next = position->next;
-      free(position);
+      my_free(position);
       return list;
   }
   /*append to end of list*/
@@ -216,7 +216,7 @@ line *executeLine(line *toexec, var *varlist){
     }
     return NULL;
   }
-  free(despaced);
+  my_free(despaced);
   freeTree(root);
   return toexec->next;
 }

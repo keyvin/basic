@@ -1,5 +1,8 @@
+#include <stdlib.h>
+#define freestanding 1
 //This file has all stdlib, stdio, string, and conversion macros
 
+#ifdef freestanding
 int my_isdigit(char c){
   if (c >= '0' && c<= '9'){
     return 1;
@@ -78,10 +81,42 @@ int strcat(char *target, char *src){
   target[len+1] = '\0';
 }
 
-void * malloc(int bytes){
-  return NULL;
+//just wrap calls
+#endif
+
+#ifndef freestanding
+void * my_malloc(size_t bytes){
+  void *result;
+  result = malloc(bytes);
+  return result;
 }
 
-void * free(void *){
+int my_free(void *s){
+  free(s);
   return NULL;
 }
+#endif
+
+#ifdef freestanding
+void *memory_block;
+#include <stdlib.h>
+void * my_malloc(size_t bytes){
+  // memory pool hasn't been initialized
+  //This will just be an address later. 
+  void *start;
+  if (!memory_block)
+    memory_block = malloc(10000000);
+  start = memory_block;
+  memory_block = memory_block+bytes; 
+  return start;
+}
+
+void *my_free(void *s){
+  return NULL;
+}
+#endif  
+  
+
+
+  
+

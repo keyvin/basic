@@ -5,7 +5,7 @@
 
 
 var * createVar(){
-  var *newvar = (var *) malloc(sizeof(var));
+  var *newvar = (var *) my_malloc(sizeof(var));
   memset(newvar->varname, '\0', MAX_VAR_LENGTH);
   newvar->val.value.i = 0;
   newvar->val.type = integer;
@@ -46,7 +46,7 @@ void setVar(var *head, char *varname, value val){
   if (existing = getVar(head, varname)){
     if (existing->val.type == str){
       if (existing->val.value.s){
-	free(existing->val.value.s);
+	my_free(existing->val.value.s);
       }
     }
     existing->val = val;
@@ -77,8 +77,8 @@ void freeVarList(var *head){
   {
     tmp = head->next;
     if (head->val.type == str && head->val.value.s)
-      free(head->val.value.s);
-    free(head);
+      my_free(head->val.value.s);
+    my_free(head);
     head = tmp;
   }
   return;

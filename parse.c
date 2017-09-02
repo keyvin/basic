@@ -58,7 +58,7 @@ var * read_var(char *string){
 //creates copy of string while removing all spaces
 char * deSpace(char *string){
   char *buffer, *position;
-  buffer = (char *) malloc(strlen(string));
+  buffer = (char *) my_malloc(strlen(string));
   position = buffer;
   for (string; *string !='\0'; string++){
     if (*string != ' '){
@@ -130,7 +130,7 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
 	  pos++;
 	  currnode->left = genNewNode();
 	  currnode->left->val.type = str;
-	  currnode->left->val.value.s = (char *) malloc(sizeof(char)*30);
+	  currnode->left->val.value.s = (char *) my_malloc(sizeof(char)*30);
 	  pos = readString(pos, currnode->left->val.value.s, 30); 
 	}
       }
@@ -181,7 +181,7 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
       else if (*pos == '\"'){
 	  currnode->left = genNewNode();
 	  currnode->left->val.type = str;
-	  currnode->left->val.value.s = (char *) malloc(sizeof(char)*30);
+	  currnode->left->val.value.s = (char *) my_malloc(sizeof(char)*30);
 	  pos = readString(pos, currnode->left->val.value.s, 30); 
       }
     }

@@ -28,7 +28,7 @@ int calcTree(evaltree *currnode, var *varlist){
     getvar= getVar(varlist, currnode->varname);
     if (getvar){
       if (getvar->val.type == str){
-	currnode->result.value.s = (char *) malloc(sizeof(char)*strlen(getvar->val.value.s));
+	currnode->result.value.s = (char *) my_malloc(sizeof(char)*strlen(getvar->val.value.s));
 	strcpy(currnode->result.value.s, getvar->val.value.s);
       }
       else
@@ -100,7 +100,7 @@ int calcTree(evaltree *currnode, var *varlist){
       }
       //todo - wrong.
       else if (ltype == str && rtype == str){
-	currnode->result.value.s = malloc(strlen(lval->s)+strlen(rval->s)+1);
+	currnode->result.value.s = my_malloc(strlen(lval->s)+strlen(rval->s)+1);
 	strcpy(currnode->result.value.s, lval->s);
 	strcat(currnode->result.value.s, rval->s);
       }
@@ -210,7 +210,7 @@ int calcTree(evaltree *currnode, var *varlist){
 
 
 evaltree * genNewNode() {
-  evaltree *ptr = (evaltree *) malloc(sizeof(evaltree));
+  evaltree *ptr = (evaltree *) my_malloc(sizeof(evaltree));
   ptr->val.type = integer;
   ptr->val.value.i = 0;
   ptr->result.value.i = 0;
@@ -228,13 +228,13 @@ void freeTree(evaltree *currnode){
     freeTree(currnode->right);
   if (currnode) {
     if (currnode->val.type == str && currnode->val.value.s){
-      free (currnode->val.value.s);
+      my_free(currnode->val.value.s);
       
     }
     if (currnode->result.type == str && currnode->result.value.s)
       if (currnode->val.value.s != currnode->result.value.s)
-	free(currnode->result.value.s);
-    free(currnode);
+	my_free(currnode->result.value.s);
+    my_free(currnode);
   }
   return;
 }

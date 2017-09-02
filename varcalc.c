@@ -10,6 +10,9 @@
 #include "parsetree.h"
 #include "executor.h"
 
+//Define freestanding to compile with stdcall vs stdlib
+#define freestanding 1
+
 /*tree structure.*/
 
 
@@ -31,6 +34,7 @@ int main(int argv, char ** argc){
   line *tmp = NULL;
   int setvar=0;
   char *eof = NULL;
+
   while (1){
     startpos = buffer;
     setvar=0;
