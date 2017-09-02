@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+//#include <string.h>
 #include <math.h>
 #include "parse.h"
 #include "varlist.h"
 #include "parsetree.h"
-
+#include "stdcall.h"
 //returns new position in the parser.
 char * readVarName(char *input, char *output){
   memset(output, '\0', 0);

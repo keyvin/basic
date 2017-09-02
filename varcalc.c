@@ -1,13 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+//#include <string.h>
 #include <ctype.h>
 #include <math.h>
+#include "stdcall.h"
 #include "varlist.h"
 #include "line.h"
 #include "parse.h"
 #include "parsetree.h"
 #include "executor.h"
+
 /*tree structure.*/
 
 

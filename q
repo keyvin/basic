@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "parsetree.h"
-//#include <string.h>
-#include "stdcall.h"
+#include <string.h>
 /*I may need to define some error codes*/
 /*They could be stored in the int value of an undefined node*/
 

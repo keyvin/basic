@@ -1,6 +1,8 @@
 #include "varlist.h"
 #include <stdlib.h>
-#include <string.h>
+//#include <string.h>
+#include "stdcall.h"
+
 
 var * createVar(){
   var *newvar = (var *) malloc(sizeof(var));
