@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-//#include "stdcall.h"
+#include "stdcall.h"
 #include "parse.h"
 #include "parsetree.h"
 #include "varlist.h"
@@ -15,14 +15,15 @@ line * newLine(char *addline){
   line *newline = (line *) my_malloc(sizeof(line));
   
   if (!isdigit(*pos)){
-    printf("Invalid line - must start with line number: %s", addline);
+    //printf("Invalid line - must start with line number: %s", addline);
     return NULL;
   }
   while (isdigit(*pos)){
     *(target++)= *(pos++);
   }
   *target = '\0';
-  sscanf(buffer,"%d", &(newline->lineno));
+  //sscanf(buffer,"%d", &(newline->lineno));
+  newline->lineno = read_int(buffer);
   pos++;
   strcpy(newline->instruction, pos);
   newline->next = NULL;
@@ -90,7 +91,7 @@ line * insertLine(line *list, line *toinsert){
 void printList(line *head)
 {
   while (head){
-    printf("%d %s\n", head->lineno, head->instruction);
+    //printf("%d %s\n", head->lineno, head->instruction);
     head = head->next;
   }
   return;
@@ -120,20 +121,23 @@ line *executeLine(line *toexec, var *varlist){
       setVar(varlist, tmpbuffer, root->result);    
   }
   if (strncmp(toexec->instruction, "PRINT", 5)==0){
-    startpos+=5;
+    startpos+=6;
     buildTree(startpos, root, 0);
     calcTree(root, varlist);
-    if (root->result.type == integer)
-	printf("%d\n", root->result.value.i);
+    if (root->result.type == integer){
+      inttoa(root->result.value.i, tmpbuffer);
+      printf("%s\n", tmpbuffer);
+      printf("%d\n", root->result.value.i);
+    }
     if (root->result.type == str)
       printf("%s\n", root->result.value.s);
   }
-  if (strncmp(toexec->instruction, "GOTO", 4)==0){
+  if (strncmp(toexec->instruction, "GOTO", 5)==0){
     startpos+=5;
     buildTree(startpos, root, 0);
     calcTree(root, varlist);
     if (root->result.value.i ==  toexec->lineno){
-      printf ("Pointless infinite loop at line %d\n", toexec->lineno);
+      //printf ("Pointless infinite loop at line %d\n", toexec->lineno);
       return NULL;
     }
     if (root->result.value.i < toexec->lineno){

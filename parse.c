@@ -102,7 +102,9 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
 	    *buffpos++ = *pos++;
 	  }
 	  *buffpos='\0';
-	  sscanf(buffer, "%i", &val);
+
+	  //sscanf(buffer, "%i", &val);
+	  val = read_int(buffer);
 	  //printf("read left val %d\n", val);
 	  //create a new leaf on left side to store read value
 	  if (noop){
@@ -165,7 +167,9 @@ char * buildTree(char *string, evaltree *currnode, int isleftset){
 	  *buffpos++ = *pos++;
 	}
 	*buffpos='\0';
-	sscanf(buffer, "%i", &val);
+	//sscanf(buffer, "%i", &val);
+	val = read_int(buffer);
+
 	//printf("read right value, %d\n",val);
 	currnode->right = genNewNode();
 	currnode->right->val.value.i = val;

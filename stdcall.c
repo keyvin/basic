@@ -3,6 +3,15 @@
 //This file has all stdlib, stdio, string, and conversion macros
 
 #ifdef freestanding
+
+int my_isalpha(char c){
+  if (c >= 'a' && c <= 'z')
+    return 1;
+  if (c >= 'A' && c <= 'Z')
+    return 1;
+  return 0;
+}
+
 int my_isdigit(char c){
   if (c >= '0' && c<= '9'){
     return 1;
@@ -114,6 +123,44 @@ void * my_malloc(size_t bytes){
 void *my_free(void *s){
   return NULL;
 }
+
+int read_int(char *source){
+  int retval = 0;
+  while (isdigit(*source)){
+    retval = retval + *source - 48;
+    source++;
+    if (isdigit(*source)){
+      retval = retval* 10;
+    }
+  }
+  return retval;
+}
+
+//buffer provided by parent.
+int inttoa(int con, char *buffer){
+    int working = con;
+    int tmp = 0;
+    int pos = 0;
+    char tmp_buffer[25];
+    while (working != 0){
+      tmp = working %10;
+      tmp_buffer[pos] = tmp + 48;
+      pos++;
+      working = working /10; //should truncate, not round
+    }
+    tmp_buffer[pos] = '\0';
+    tmp = 0;
+
+    //reverse
+    for (int a = pos-1; a >= 0; a--){
+      buffer[tmp] = tmp_buffer[a];
+      tmp++;
+    }
+    buffer[pos] = '\0';
+    return 0;  
+}
+
+
 #endif  
   
 
